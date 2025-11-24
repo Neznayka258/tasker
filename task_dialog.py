@@ -15,5 +15,16 @@ class TaskEditorDialog(QDialog):
         self.ui.combo_type.clear()
         for name in TASK_TYPES:
             self.ui.combo_type.addItem(name)
-        self.ui.combo_user.clear()
-        self.ui.combo_user.addItem("Default", 1)
+        if hasattr(self.ui, "label_user"):
+            self.ui.label_user.hide()
+        if hasattr(self.ui, "combo_user"):
+            self.ui.combo_user.hide()
+
+    def get_data(self) -> dict:
+        return {
+            "title": self.ui.edit_title.text().strip(),
+            "description": self.ui.edit_desc.toPlainText().strip(),
+            "due_date": self.ui.edit_date.date().toString("dd.MM.yyyy"),
+            "priority": self.ui.combo_prio.currentIndex() + 1,
+            "task_type": self.ui.combo_type.currentText()
+        }
