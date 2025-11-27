@@ -59,12 +59,6 @@ class Ui_MainWindow(object):
         self.actionFilterDate.setObjectName(u"actionFilterDate")
         self.actionFilterType = QAction(MainWindow)
         self.actionFilterType.setObjectName(u"actionFilterType")
-        self.actionFilterUser = QAction(MainWindow)
-        self.actionFilterUser.setObjectName(u"actionFilterUser")
-        self.actionAddUser = QAction(MainWindow)
-        self.actionAddUser.setObjectName(u"actionAddUser")
-        self.actionSelectUser = QAction(MainWindow)
-        self.actionSelectUser.setObjectName(u"actionSelectUser")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.main_layout = QVBoxLayout(self.centralwidget)
@@ -235,12 +229,9 @@ class Ui_MainWindow(object):
         self.menuView.addSeparator()
         self.menuView.addAction(self.actionFilterDate)
         self.menuView.addAction(self.actionFilterType)
-        self.menuView.addAction(self.actionFilterUser)
         self.menuView.addSeparator()
         self.menuView.addAction(self.actionThemeLight)
         self.menuView.addAction(self.actionThemeDark)
-        self.menuTypeHere.addAction(self.actionAddUser)
-        self.menuTypeHere.addAction(self.actionSelectUser)
 
         self.retranslateUi(MainWindow)
 
@@ -267,9 +258,6 @@ class Ui_MainWindow(object):
         self.actionThemeDark.setText(QCoreApplication.translate("MainWindow", u"\u0422\u0451\u043c\u043d\u0430\u044f \u0442\u0435\u043c\u0430", None))
         self.actionFilterDate.setText(QCoreApplication.translate("MainWindow", u"\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u0434\u0430\u0442\u0435", None))
         self.actionFilterType.setText(QCoreApplication.translate("MainWindow", u"\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u0442\u0438\u043f\u0443 \u0437\u0430\u0434\u0430\u0447\u0438", None))
-        self.actionFilterUser.setText(QCoreApplication.translate("MainWindow", u"\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044e", None))
-        self.actionAddUser.setText(QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f", None))
-        self.actionSelectUser.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f", None))
         self.lbl_search.setText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a:", None))
         self.edit_search.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0437\u0430\u0434\u0430\u0447\u0438...", None))
         self.lbl_status.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043e: 0", None))
@@ -298,6 +286,5 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"\u0424\u0430\u0439\u043b", None))
         self.menuTasks.setTitle(QCoreApplication.translate("MainWindow", u"\u0417\u0430\u0434\u0430\u0447\u0438", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"\u0412\u0438\u0434", None))
-        self.menuTypeHere.setTitle(QCoreApplication.translate("MainWindow", u"Type Here", None))
     # retranslateUi
 

@@ -50,7 +50,7 @@ class DBManager:
             INSERT INTO tasks  (title, description, due_date, priority, task_type, is_done)
             VALUES(?,?,?,?,?,?)
             """,
-            ( title, description, due_date, priority, task_type, is_done)
+            (  title, description, due_date, priority, task_type, is_done)
 
         )
         self.conn.commit()
@@ -59,4 +59,23 @@ class DBManager:
         cur = self.conn.cursor()
         cur.execute("SELECT * FROM tasks ORDER BY is_done, id DESC")
         return cur.fetchall()
-#ASC
+
+    def update_task(self, task_id, title, description, due_date, priority, task_type, is_done):
+        self.conn.execute(
+            """
+            UPDATE tasks SET title = ?,
+                description = ?, 
+                due_date = ?,
+                priority = ?,
+                task_type = ?,
+                is_done = ?
+            WHERE id = ?
+            """,
+            (title, description, due_date, priority, task_type, is_done, task_id),
+        )
+        self.conn.commit()
+
+    def delete_task(self, task_id):
+        self.conn.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+        self.conn.commit()
+

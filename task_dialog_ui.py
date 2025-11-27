@@ -99,16 +99,6 @@ class Ui_TaskDialog(object):
 
         self.verticalLayout.addWidget(self.combo_type)
 
-        self.label_user = QLabel(TaskDialog)
-        self.label_user.setObjectName(u"label_user")
-
-        self.verticalLayout.addWidget(self.label_user)
-
-        self.combo_user = QComboBox(TaskDialog)
-        self.combo_user.setObjectName(u"combo_user")
-
-        self.verticalLayout.addWidget(self.combo_user)
-
         self.buttonBox = QDialogButtonBox(TaskDialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
@@ -136,7 +126,5 @@ class Ui_TaskDialog(object):
         self.combo_prio.setItemText(1, QCoreApplication.translate("TaskDialog", u"2 \u2014 \u0441\u0440\u0435\u0434\u043d\u0438\u0439", None))
         self.combo_prio.setItemText(2, QCoreApplication.translate("TaskDialog", u"3 \u2014 \u0432\u044b\u0441\u043e\u043a\u0438\u0439", None))
 
-        self.label_type.setText(QCoreApplication.translate("TaskDialog", u"\u0422\u0438\u043f \u0437\u0430\u0434\u0430\u0447\u0438:", None))
-        self.label_user.setText(QCoreApplication.translate("TaskDialog", u"\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c:", None))
-    # retranslateUi
+        self.label_type.setText(QCoreApplication.translate("TaskDialog", u"\u0422\u0438\u043f \u0437\u0430\u0434\u0430\u0447\u0438:", None))    # retranslateUi
 
