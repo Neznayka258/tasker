@@ -112,19 +112,12 @@ class TaskManagerWindow(QMainWindow):
             return None
         return self._tasks[row]
 
-    def _get_task_by_row(self, row):
-        if row < 0 or row >= len(self._tasks):
-            return None
-        return self._tasks[row]
-
-    def _is_done_change(self, item: QTableWidgetItem):
-        if item.column() != 0:
-            return None
-        task = self._get_task_by_row(item.row())
+    def _is_done_change(self, *_):
+        task = self._get_selected_task()
         if not task:
-            return None
-        is_done = item.checkState() == Qt.Checked
-        self.db.set_task_done(task[id], is_done)
+            return
+        is_done = not bool(task["is_done"])
+        self.db.set_task_done(task["id"], is_done)
         task["is_done"] = int(is_done)
         self._refresh_table()
 
@@ -160,3 +153,14 @@ class TaskManagerWindow(QMainWindow):
                 is_done=task["is_done"]
             )
         self._refresh_table()
+
+    def _is_done_change(self, *_):
+        row = self.ui.table.currentRow()
+        task = self._get_selected_task()
+        if not task:
+            return
+        is_done = not bool(task["is_done"])
+        self.db.set_task_done(task["id"], is_done)
+        task["is_done"] = int(is_done)
+
+        self.ui.table.item(row, 0).setCheckState(Qt.Checked if is_done else Qt.Unchecked)

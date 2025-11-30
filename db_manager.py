@@ -79,13 +79,9 @@ class DBManager:
         self.conn.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
         self.conn.commit()
 
-    def set_task_done(self, task_id, is_done):
+    def set_task_done(self, task_id, is_done: bool):
         self.conn.execute(
-            """
-            UPDATE task SET is_done = ?
-            WHERE id = ?
-            """,
-            (is_done, task_id)
-
+            "UPDATE tasks SET is_done = ? WHERE id = ?",
+            (int(bool(is_done)), task_id),
         )
         self.conn.commit()
