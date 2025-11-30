@@ -32,8 +32,8 @@ class TaskManagerWindow(QMainWindow):
         self.ui.btn_add.clicked.connect(self.show_dialog)
         self.ui.btn_delete.clicked.connect(self.delete_task)
         self.ui.btn_edit.clicked.connect(self.edit_task)
+        self.ui.btn_done.clicked.connect(self._is_done_change)
         for button in [
-            self.ui.btn_done,
             self.ui.btn_prev,
             self.ui.btn_next,
         ]:
@@ -49,7 +49,7 @@ class TaskManagerWindow(QMainWindow):
             self.ui.actionAddTask: self.show_dialog,
             self.ui.actionEdit: self.edit_task,
             self.ui.actionDelete: self.delete_task,
-            self.ui.actionDone: self.show_message,
+            self.ui.actionDone: self._is_done_change,
             self.ui.actionAll: self.show_message,
             self.ui.actionDoneOnly: self.show_message,
             self.ui.actionUndone: self.show_message,
@@ -111,6 +111,22 @@ class TaskManagerWindow(QMainWindow):
             QMessageBox.warning(self, "Предупреждение", "Сначала выберите задачу в списке.")
             return None
         return self._tasks[row]
+
+    def _get_task_by_row(self, row):
+        if row < 0 or row >= len(self._tasks):
+            return None
+        return self._tasks[row]
+
+    def _is_done_change(self, item: QTableWidgetItem):
+        if item.column() != 0:
+            return None
+        task = self._get_task_by_row(item.row())
+        if not task:
+            return None
+        is_done = item.checkState() == Qt.Checked
+        self.db.set_task_done(task[id], is_done)
+        task["is_done"] = int(is_done)
+        self._refresh_table()
 
     def delete_task(self):
         task = self._get_selected_task()
