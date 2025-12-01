@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QActionGroup
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -6,9 +7,12 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
 )
 
+from config import DARK_THEME, LIGHT_THEME
 from db_manager import DBManager
 from main_window_ui import Ui_MainWindow
 from task_dialog import TaskEditorDialog
+
+
 
 MESSAGE_TEXT = "Функция пока не реализована"
 
@@ -16,6 +20,7 @@ MESSAGE_TEXT = "Функция пока не реализована"
 class TaskManagerWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self._current_theme = "light"
         self.db = DBManager()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -26,6 +31,8 @@ class TaskManagerWindow(QMainWindow):
         self._connect_actions()
         self.ui.table.itemChanged.connect(self._handle_status_change)
         self._refresh_table()
+        self._theme_group = QActionGroup(self)
+        self._theme_group.setExclusive(True)
 
     def _connect_buttons(self):
         self.ui.btn_add.clicked.connect(self.show_dialog)
@@ -37,25 +44,33 @@ class TaskManagerWindow(QMainWindow):
         self.ui.edit_search.textChanged.connect(lambda _: self.show_message())
 
     def _connect_actions(self):
-        action_map = {
-            self.ui.actionNew: self.show_message,
-            self.ui.actionOpen: self.show_message,
-            self.ui.actionSave: self.show_message,
-            self.ui.actionExit: self.close,
-            self.ui.actionAddTask: self.show_dialog,
-            self.ui.actionEdit: self.edit_task,
-            self.ui.actionDelete: self.delete_task,
-            self.ui.actionDone: self._is_done_change,
-            self.ui.actionAll: self.show_message,
-            self.ui.actionDoneOnly: self.show_message,
-            self.ui.actionUndone: self.show_message,
-            self.ui.actionFilterDate: self.show_message,
-            self.ui.actionFilterType: self.show_message,
-            self.ui.actionThemeLight: self.show_message,
-            self.ui.actionThemeDark: self.show_message,
-        }
-        for action, slot in action_map.items():
-            if action is not None:
+        if not hasattr(self, "_theme_group"):
+            self._theme_group = QActionGroup(self)
+            self._theme_group.setExclusive(True)
+        action_map = [
+            ("actionNew", self.show_message),
+            ("actionOpen", self.show_message),
+            ("actionSave", self.show_message),
+            ("actionExit", self.close),
+            ("actionAddTask", self.show_dialog),
+            ("actionEdit", self.edit_task),
+            ("actionDelete", self.delete_task),
+            ("actionDone", self._is_done_change),
+            ("actionAll", self.show_message),
+            ("actionDoneOnly", self.show_message),
+            ("actionUndone", self.show_message),
+            ("actionFilterDate", self.show_message),
+            ("actionFilterType", self.show_message),
+            ("actionThemeLight", self._set_light_theme),
+            ("actionThemeDark", self._set_dark_theme),
+        ]
+        for name, slot in action_map:
+            action = getattr(self.ui, name, None)
+            if action is not None and slot is not None:
+                if name in ("actionThemeLight", "actionThemeDark"):
+                    action.setCheckable(True)
+                    if action not in self._theme_group.actions():
+                        self._theme_group.addAction(action)
                 action.triggered.connect(slot)
 
     def show_dialog(self):
@@ -180,3 +195,24 @@ class TaskManagerWindow(QMainWindow):
 
     def show_message(self, *_):
         QMessageBox.information(self, "Информация", MESSAGE_TEXT)
+
+    def _apply_theme(self, theme: str):
+        if theme == "dark":
+            self.setStyleSheet(DARK_THEME)
+        else:
+            self.setStyleSheet(LIGHT_THEME)
+        self._current_theme = theme
+        action_light = getattr(self.ui, "actionThemeLight", None)
+        action_dark = getattr(self.ui, "actionThemeDark", None)
+        if action_light:
+            action_light.setChecked(theme == "light")
+        if action_dark:
+            action_dark.setChecked(theme == "dark")
+
+    def _set_light_theme(self, *_):
+        if self._current_theme != "light":
+            self._apply_theme("light")
+
+    def _set_dark_theme(self, *_):
+        if self._current_theme != "dark":
+            self._apply_theme("dark")
