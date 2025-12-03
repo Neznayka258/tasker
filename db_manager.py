@@ -2,13 +2,17 @@ import sqlite3
 from pathlib import Path
 
 DB_NAME = "tasks.db"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+DEFAULT_DB_PATH = DATA_DIR / DB_NAME
 TASK_TYPES = ["Рабочая", "Личная", "Срочная", "Учебная", "Другое"]
 
 
 class DBManager:
-    def __init__(self, db_path: str = DB_NAME):
+    def __init__(self, db_path: str | Path | None = None):
         self.conn: sqlite3.Connection | None = None
-        self.path = Path(db_path)
+        self.path = Path(db_path) if db_path else DEFAULT_DB_PATH
         self._connect(self.path)
 
     def switch_database(self, db_path: str):
@@ -24,6 +28,7 @@ class DBManager:
             self.conn.commit()
             self.conn.close()
         self.path = db_path
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         self.conn = sqlite3.connect(self.path)
         self.conn.row_factory = sqlite3.Row
         self._create_tables()
